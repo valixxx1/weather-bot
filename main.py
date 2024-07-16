@@ -1,4 +1,3 @@
-from pprint import pformat
 import telebot
 import requests
 import json
@@ -31,7 +30,9 @@ def current(message):
     response = requests.get(current_url, params=query)
     response.raise_for_status()
     response = json.loads(response.text)
-    response = pformat(response)
+
+    response = f'{response['current']['temp_c']} °C\n{response['current']['condition']['text']}'
+
     try:
         bot.reply_to(message, response)
     except:
