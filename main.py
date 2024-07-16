@@ -16,20 +16,25 @@ bot = telebot.TeleBot(tele_token)
 @bot.message_handler(commands=['start'])
 def welcome(message):
     text = 'Welcome! This bot can tell you about weather. Just type /current'
-    bot.send_message(message.chat.id, text)
+    try:
+        bot.send_message(message.chat.id, text)
+    except:
+        pass
 
 @bot.message_handler(commands=['current'])
 def current(message):
     query = {
         'key': weather_key,
-        'q': 'Moscow'
+        'q': message.text[len('/current '):]
     }
 
     response = requests.get(current_url, params=query)
     response.raise_for_status()
     response = json.loads(response.text)
     response = pformat(response)
-
-    bot.reply_to(message, response)
+    try:
+        bot.reply_to(message, response)
+    except:
+        pass
 
 bot.polling()
