@@ -15,7 +15,7 @@ bot = telebot.TeleBot(tele_token)
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
-    text = 'Welcome! This bot can tell you about weather. Just type /current'
+    text = 'Welcome! This bot can tell you about weather. Just type /current <city>'
     try:
         bot.send_message(message.chat.id, text)
     except:
@@ -32,7 +32,10 @@ def current(message):
     response.raise_for_status()
     response = json.loads(response.text)
 
-    response = f'{weather.emoji_by_weather(response['current']['condition']['code'])}\n{response['current']['temp_c']} °C\n{response['current']['condition']['text']}'
+    response = f'''{weather.emoji_by_weather(response['current']['condition']['code'])}
+{response['current']['condition']['text']}
+{response['current']['temp_c']} °C
+{response['current']['cloud']}% cloudy'''
 
     try:
         bot.send_message(message.chat.id, response)
