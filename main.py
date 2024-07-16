@@ -1,6 +1,7 @@
 import telebot
 import requests
 import json
+import io
 
 with open('telebot.key', 'r') as f:
     tele_token = f.read()
@@ -31,10 +32,14 @@ def current(message):
     response.raise_for_status()
     response = json.loads(response.text)
 
+    image_url = 'http:' + response['current']['condition']['icon']
+    image = requests.get(image_url)
+    image = io.BytesIO(image.content)
+
     response = f'{response['current']['temp_c']} °C\n{response['current']['condition']['text']}'
 
     try:
-        bot.reply_to(message, response)
+        bot.send_photo(message.chat.id, image, caption=response)
     except:
         pass
 
