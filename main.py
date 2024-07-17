@@ -29,7 +29,10 @@ def current(message):
     }
 
     response = requests.get(current_url, params=query)
-    response.raise_for_status()
+    if response.status_code != 200:
+        bot.send_message(message.chat.id, "This place does not support by weather-bot.")
+        return
+
     response = json.loads(response.text)
 
     response = f'''{weather.emoji_by_weather(response['current']['condition']['code'])}
