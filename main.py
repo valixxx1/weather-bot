@@ -35,7 +35,8 @@ def current(message):
 
     response = json.loads(response.text)
 
-    response = f'''{weather.emoji_by_weather(response['current']['condition']['code'])}
+    response = f'''{response['location']['region']}
+{weather.emoji_by_weather(response['current']['condition']['code'])}
 {response['current']['condition']['text']}
 {response['current']['temp_c']} °C
 {response['current']['cloud']}% cloudy'''
